@@ -210,20 +210,22 @@ window.addEventListener('DOMContentLoaded', () => {
         // Send the name to the server
         socket.emit('user:set-name', userName);
 
-        // Hide name modal
+        // Hide modal, show app
         nameModal.classList.remove('show');
+        showApp(); // This sets .app-container to display: flex
 
-        // Show the main app
-        showApp();
-        resizeCanvas(); // This is in canvas.js
+        // Wait for the browser to paint the new layout
+        requestAnimationFrame(() => {
+            // Resize the canvas *drawing buffer*
+            resizeCanvas();
 
-        //request the history for the (correctly sized) canvas
-        socket.emit('canvas:request-history');
+            // NOW request the history for the (correctly sized) canvas
+            socket.emit('canvas:request-history');
 
-        // Initialize all the button listeners
-        initializeApp();
+            // Initialize all toolbar/canvas event listeners
+            initializeApp();
+        });
     }
-
     nameSubmitBtn.addEventListener('click', submitName);
 
     nameInput.addEventListener('keyup', (e) => {
