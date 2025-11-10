@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Inter:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div id="room-modal">
+        <div class="modal-logo">
+            <h2>Canvas</h2>
+        </div>
+        <div class="modal-content">
+            <div class="room-option">
+                <h2>Create a New Room</h2>
+                <p>Start a new canvas and invite others with a 6-digit code.</p>
+                <button id="room-create-btn">Create Room</button>
+            </div>
+
+            <div class="modal-divider">OR</div>
+
+            <div class="room-option">
+                <h2>Join an Existing Room</h2>
+                <p>Enter the 6-digit code your friend gave you.</p>
+                <input type="text" id="room-join-input" placeholder="123456" maxlength="6">
+                <button id="room-join-btn">Join Room</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="name-modal-overlay">
+        <div class="modal-content">
+            <h4>Welcome to the room!</h4>
+            <p>Please enter your name to start drawing.</p>
+            <input type="text" id="username-input" placeholder="Your Name" maxlength="20">
+            <button id="username-submit-btn">Start Drawing</button>
+            <button id="name-modal-exit-btn" class="modal-exit-btn">Exit Room</button>
+        </div>
+    </div>
+
+    <div class="modal-overlay" id="confirm-clear-modal">
+        <div class="modal-content">
+            <h4>Clear Canvas?</h4>
+            <p>This will clear the canvas for everyone in the room. This action can be undone.</p>
+            <div class="modal-buttons">
+                <button id="confirm-clear-cancel-btn">Cancel</button>
+                <button id="confirm-clear-confirm-btn" class="confirm">Clear Canvas</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="app-container" style="display: none;">
+
+        <div id="user-list-container">
+            <h3>Online Users</h3>
+            <div id="user-list">
+            </div>
+        </div>
+
+        <div class="main-content">
+
+            <div class="header-toolbar-wrapper">
+
+                <h2 class="canvas-title">Canvas</h2>
+
+                <div class="toolbar" id="main-toolbar">
+
+                    <div class="tool-option" id="color-picker-option">
+                        <label for="color-picker">Color:</label>
+                        <input type="color" id="color-picker" value="#000000">
+                    </div>
+
+                    <div class="tool-option">
+                        <label for="stroke-width">Width:</label>
+                        <input type="range" id="stroke-width" min="1" max="50" value="5">
+                    </div>
+
+                    <div class="toolbar-divider"></div>
+
+                    <button id="brush-btn" title="Brush">Brush</button>
+                    <button id="eraser-btn" title="Eraser">Eraser</button>
+
+                    <div class="toolbar-divider"></div>
+
+                    <button id="undo-btn" class="icon-btn" title="Undo">
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="2.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3" />
+                        </svg>
+                    </button>
+                    <button id="redo-btn" class="icon-btn" title="Redo">
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="2.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15 15l6-6m0 0l-6-6m6 6H9a6 6 0 000 12h3" />
+                        </svg>
+                    </button>
+
+                    <div class="toolbar-divider"></div>
+
+                    <button id="clear-btn" class="clear-btn" title="Clear Canvas">Clear</button>
+
+                    <div class="toolbar-divider"></div>
+                    <button id="save-btn" class="icon-btn" title="Save as PNG">
+                        <svg class="icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="2.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                        </svg>
+                    </button>
+                </div>
+
+                <div class="title-container">
+                    <h1 id="room-title">Room: 123456</h1>
+                    <button id="copy-room-btn" class="copy-btn icon-btn" title="Copy Room Code">
+                        <svg class="icon icon-clipboard" xmlns="http://www.w3.org/2000/svg" fill="none"
+                            viewBox="0 0 24 24" stroke-width="2" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M15.666 3.888A2.25 2.25 0 0013.5 2.25h-3c-1.03 0-1.9.693-2.166 1.638m7.332 0c.055.194.084.4.084.612v0a2.25 2.25 0 01-2.25 2.25H9A2.25 2.25 0 016.75 4.5v0c0-.212.03-.418.084-.612m7.332 0c.646.049 1.288.11 1.927.184 1.1.128 1.907 1.077 1.907 2.185V19.5A2.25 2.25 0 0116.5 21.75H7.5A2.25 2.25 0 015.25 19.5V4.5c0-1.108.806-2.057 1.907-2.185A48.208 48.208 0 0111.25 2.25h1.5c.646.049 1.288.11 1.927.184z" />
+                        </svg>
+                        <svg class="icon icon-check" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                            stroke-width="2.5" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="canvas-wrapper">
+                <canvas id="drawing-canvas"></canvas>
+                <div id="cursor-container">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="canvas.js"></script>
+    <script src="websocket.js"></script>
+    <script src="main.js"></script>
+</body>
+
+</html>
