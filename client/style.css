@@ -305,11 +305,11 @@ button {
 .canvas-title {
     font-family: var(--font-cursive);
     font-weight: 700;
-    font-size: 100px;
+    font-size: 70px;
     color: var(--color-primary);
     margin: 0;
     line-height: 1;
-    padding-left: 70px;
+    padding-left: 10px;
     flex-grow: 1;
 }
 
